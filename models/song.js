@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-//absolute path to contacts.json
+// absolute path to contacts.json
 const songPath = path.join(__dirname, "./songs.json");
 
 // get all songs
@@ -51,6 +51,7 @@ const removeSong = async (songId) => {
   const [result] = songsList.splice(songIndex, 1);
 
   await fs.writeFile(songPath, JSON.stringify(songsList, null, 2));
+  return result;
 };
 
 module.exports = {
