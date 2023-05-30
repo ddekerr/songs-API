@@ -1,27 +1,14 @@
 const express = require("express");
-const songs = require("../../models/song");
+const ctrl = require("../../controllers/songs");
+const { validateBody } = require("../../middlewares");
+const { songSchema } = require("../../schemas/songs");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const result = await songs.getSongsList();
-  res.json(result);
-});
-
-router.get("/:songId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.delete("/:songId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.put("/:songId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/", ctrl.getSongsList);
+router.get("/:songId", ctrl.getSongById);
+router.post("/", validateBody(songSchema), ctrl.addNewSong);
+router.put("/:songId", validateBody(songSchema), ctrl.updateSong);
+router.delete("/:songId", ctrl.removeSong);
 
 module.exports = router;

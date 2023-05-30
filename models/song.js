@@ -26,18 +26,18 @@ const addNewSong = async (data) => {
     id: nanoid(),
     ...data,
   };
-  const updatedSongsList = songsList.concat(newSong);
+  songsList.push(newSong);
 
-  await fs.writeFile(songPath, JSON.stringify(updatedSongsList, null, 2));
+  await fs.writeFile(songPath, JSON.stringify(songsList, null, 2));
   return newSong;
 };
 
 // update song by ID
 const updateSong = async (songId, data) => {
   const songsList = await getSongsList();
-  const songIndex = songsList.findIndex((song) => Number(song.id) === songId);
+  const songIndex = songsList.findIndex((song) => song.id === songId);
   if (songIndex === -1) return null;
-  songsList[songIndex] = { songId, ...data };
+  songsList[songIndex] = { id: songId, ...data };
 
   await fs.writeFile(songPath, JSON.stringify(songsList, null, 2));
   return songsList[songIndex];
@@ -46,7 +46,7 @@ const updateSong = async (songId, data) => {
 // remove song by ID
 const removeSong = async (songId) => {
   const songsList = await getSongsList();
-  const songIndex = songsList.findIndex((song) => Number(song.id) === songId);
+  const songIndex = songsList.findIndex((song) => song.id === songId);
   if (songIndex === -1) return null;
   const [result] = songsList.splice(songIndex, 1);
 
