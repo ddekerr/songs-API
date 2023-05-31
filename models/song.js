@@ -1,63 +1,50 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const { model, Schema } = require("mongoose");
+const Joi = require("joi");
 
-// absolute path to contacts.json
-const songPath = path.join(__dirname, "./songs.json");
+// const { GENRES } = require("../constants");
+const { handleMongooseError } = require("../helpers");
 
-// get all songs
-const getSongsList = async () => {
-  const songsList = await fs.readFile(songPath);
-  return JSON.parse(songsList);
-};
+const songMongooseSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-// get one song by ID
-const getSongById = async (songId) => {
-  const songsList = await getSongsList();
-  const song = songsList.find((song) => song.id === songId);
+songMongooseSchema.post("save", handleMongooseError);
 
-  return song || null;
-};
+const songJoiSchema = Joi.object({
+  title: Joi.string().required(),
+  author: Joi.string().required(),
+});
 
-// add new song
-const addNewSong = async (data) => {
-  const songsList = await getSongsList();
-  const newSong = {
-    id: nanoid(),
-    ...data,
-  };
-  songsList.push(newSong);
+const Song = model("song", songMongooseSchema);
 
-  await fs.writeFile(songPath, JSON.stringify(songsList, null, 2));
-  return newSong;
-};
+module.exports = { Song, songJoiSchema };
 
-// update song by ID
-const updateSong = async (songId, data) => {
-  const songsList = await getSongsList();
-  const songIndex = songsList.findIndex((song) => song.id === songId);
-  if (songIndex === -1) return null;
-  songsList[songIndex] = { id: songId, ...data };
-
-  await fs.writeFile(songPath, JSON.stringify(songsList, null, 2));
-  return songsList[songIndex];
-};
-
-// remove song by ID
-const removeSong = async (songId) => {
-  const songsList = await getSongsList();
-  const songIndex = songsList.findIndex((song) => song.id === songId);
-  if (songIndex === -1) return null;
-  const [result] = songsList.splice(songIndex, 1);
-
-  await fs.writeFile(songPath, JSON.stringify(songsList, null, 2));
-  return result;
-};
-
-module.exports = {
-  getSongsList,
-  getSongById,
-  addNewSong,
-  updateSong,
-  removeSong,
-};
+// {
+//   user_id: null
+//   title: ""
+//   author:""
+//   genre: []
+//   pathToSong: ""
+//   pathToVideo: ""
+//   pathToImg: ""
+//   text: {
+//     intro: ""
+//     verse: ""
+//     chorus: ""
+//     verse2: ""
+//   }
+//   chords: {
+//     id: "Dm"
+//     value: "Dm"
+//   }
+//   dowloaded: 0
+//   watched: 0
+//   listened: 0
+//   created_by: ""
+//   created_at: Date
+//   updated_at: Date,
+// }

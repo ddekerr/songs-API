@@ -1,14 +1,14 @@
-const songs = require("../models/song");
+const { Song } = require("../models/song");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getSongsList = async (req, res) => {
-  const result = await songs.getSongsList();
+  const result = await Song.find();
   res.json(result);
 };
 
 const getSongById = async (req, res) => {
   const { songId } = req.params;
-  const result = await songs.getSongById(songId);
+  const result = await Song.findById(songId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -16,21 +16,22 @@ const getSongById = async (req, res) => {
 };
 
 const addNewSong = async (req, res) => {
-  const result = await songs.addNewSong(req.body);
+  const result = await Song.create(req.body);
   res.status(201).json(result);
 };
 
-const updateSong = async (req, res) => {
-  const result = await songs.updateSong(req.params.songId, req.body);
+const updateSongByID = async (req, res) => {
+  const { songId } = req.params;
+  const result = await Song.findByIdAndUpdate(songId, req.body, { new: true });
   if (!result) {
     throw HttpError(404, "Not found");
   }
   res.json(result);
 };
 
-const removeSong = async (req, res) => {
+const removeSongById = async (req, res) => {
   const { songId } = req.params;
-  const result = await songs.removeSong(songId);
+  const result = await Song.findByIdAndRemove(songId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -41,6 +42,6 @@ module.exports = {
   getSongsList: ctrlWrapper(getSongsList),
   getSongById: ctrlWrapper(getSongById),
   addNewSong: ctrlWrapper(addNewSong),
-  updateSong: ctrlWrapper(updateSong),
-  removeSong: ctrlWrapper(removeSong),
+  updateSong: ctrlWrapper(updateSongByID),
+  removeSong: ctrlWrapper(removeSongById),
 };
