@@ -13,6 +13,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       match: EMAIL_REG_EXP,
+      unique: true,
       required: true,
     },
     password: {
