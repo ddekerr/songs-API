@@ -22,7 +22,6 @@ const songMongooseSchema = new Schema(
         },
       ],
       required: true,
-      default: [],
     },
     chords: {
       type: [String],
