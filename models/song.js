@@ -37,6 +37,7 @@ const songMongooseSchema = new Schema(
 songMongooseSchema.post("save", handleMongooseError);
 
 const songJoiSchema = Joi.object({
+  user_id: Joi.string().required(),
   title: Joi.string().required(),
   author: Joi.string().required(),
 });
