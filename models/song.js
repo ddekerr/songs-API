@@ -1,13 +1,36 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
 
-// const { GENRES } = require("../constants");
+const { GENRES } = require("../constants");
 const { handleMongooseError } = require("../helpers");
 
 const songMongooseSchema = new Schema(
   {
+    user_id: { type: String, required: true, default: null },
+    created_by: { type: String, require: true },
     title: { type: String, required: true },
     author: { type: String, required: true },
+    genres: { type: GENRES, default: [] },
+    path_to_song: String,
+    path_to_video: String,
+    path_to_img: String,
+    text: {
+      type: [
+        {
+          block_title: String,
+          block_text: String,
+        },
+      ],
+      required: true,
+      default: [],
+    },
+    chords: {
+      type: [String],
+      default: [],
+    },
+    dowloaded: Number,
+    watched: Number,
+    listened: Number,
   },
   { versionKey: false, timestamps: true }
 );
@@ -22,29 +45,3 @@ const songJoiSchema = Joi.object({
 const Song = model("song", songMongooseSchema);
 
 module.exports = { Song, songJoiSchema };
-
-// {
-//   user_id: null
-//   title: ""
-//   author:""
-//   genre: []
-//   pathToSong: ""
-//   pathToVideo: ""
-//   pathToImg: ""
-//   text: {
-//     intro: ""
-//     verse: ""
-//     chorus: ""
-//     verse2: ""
-//   }
-//   chords: {
-//     id: "Dm"
-//     value: "Dm"
-//   }
-//   dowloaded: 0
-//   watched: 0
-//   listened: 0
-//   created_by: ""
-//   created_at: Date
-//   updated_at: Date,
-// }
