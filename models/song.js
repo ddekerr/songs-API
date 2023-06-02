@@ -6,7 +6,7 @@ const { handleMongooseError } = require("../helpers");
 
 const songMongooseSchema = new Schema(
   {
-    user_id: { type: String, required: true, default: null },
+    user_id: { type: String, required: true },
     created_by: { type: String, require: true },
     title: { type: String, required: true },
     author: { type: String, required: true },
