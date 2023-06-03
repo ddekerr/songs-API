@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrl = require("../../controllers/auth");
-const { validateBody } = require("../../middlewares");
+const { validateBody, authenticate } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
 const router = express.Router();
@@ -12,5 +12,7 @@ router.post(
   ctrl.register
 );
 router.post("/login", validateBody(schemas.loginUserSchema), ctrl.login);
+router.post("/logout", authenticate, ctrl.logout);
+router.post("/refresh", authenticate, ctrl.refresh);
 
 module.exports = router;

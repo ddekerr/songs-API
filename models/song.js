@@ -6,8 +6,9 @@ const { handleMongooseError } = require("../helpers");
 
 const songMongooseSchema = new Schema(
   {
-    user_id: { type: String, required: true },
-    created_by: { type: String, require: true },
+    is_public: { type: Boolean, required: false, default: false },
+    is_moderate: { type: Boolean, required: false, default: false },
+    owner: { type: Schema.Types.ObjectId, ref: "user", required: false },
     title: { type: String, required: true },
     author: { type: String },
     genres: { type: GENRES, default: [] },
@@ -37,8 +38,8 @@ const songMongooseSchema = new Schema(
 songMongooseSchema.post("save", handleMongooseError);
 
 const songJoiSchema = Joi.object({
-  user_id: Joi.string().required(),
-  created_by: Joi.string().required(),
+  is_public: Joi.boolean(),
+  is_moderate: Joi.boolean(),
   title: Joi.string().required(),
   author: Joi.string(),
   genres: Joi.array().items(Joi.string().valid(...GENRES)),

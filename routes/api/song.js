@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrl = require("../../controllers/songs");
-const { validateBody, isValidId } = require("../../middlewares");
+const { validateBody, isValidId, authenticate } = require("../../middlewares");
 const { songJoiSchema } = require("../../models/song");
 
 const router = express.Router();
