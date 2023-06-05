@@ -36,7 +36,10 @@ const login = async (req, res) => {
   }
 
   const token = setJwtToken(user._id);
-  res.json({ token });
+  res.status(200).json({
+    user: { name: user.name, email: user.email },
+    token,
+  });
 };
 
 const logout = async (req, res) => {
