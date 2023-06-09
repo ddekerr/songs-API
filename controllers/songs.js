@@ -18,7 +18,8 @@ const getSongById = async (req, res) => {
 };
 
 const addNewSong = async (req, res) => {
-  const result = await Song.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Song.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

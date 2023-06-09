@@ -7,8 +7,14 @@ const router = express.Router();
 
 router.get("/", ctrl.getSongsList);
 router.get("/:songId", isValidId, ctrl.getSongById);
-router.post("/", validateBody(songJoiSchema), ctrl.addNewSong);
-router.put("/:songId", isValidId, validateBody(songJoiSchema), ctrl.updateSong);
-router.delete("/:songId", isValidId, ctrl.removeSong);
+router.post("/", authenticate, validateBody(songJoiSchema), ctrl.addNewSong);
+router.put(
+  "/:songId",
+  authenticate,
+  isValidId,
+  validateBody(songJoiSchema),
+  ctrl.updateSong
+);
+router.delete("/:songId", authenticate, isValidId, ctrl.removeSong);
 
 module.exports = router;
