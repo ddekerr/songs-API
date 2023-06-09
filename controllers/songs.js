@@ -9,9 +9,11 @@ const getSongsList = async (req, res) => {
 const getSongById = async (req, res) => {
   const { songId } = req.params;
   const result = await Song.findById(songId);
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
+
   res.json(result);
 };
 
@@ -23,18 +25,22 @@ const addNewSong = async (req, res) => {
 const updateSongByID = async (req, res) => {
   const { songId } = req.params;
   const result = await Song.findByIdAndUpdate(songId, req.body, { new: true });
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
+
   res.json(result);
 };
 
 const removeSongById = async (req, res) => {
   const { songId } = req.params;
   const result = await Song.findByIdAndRemove(songId);
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
+
   res.json({ message: "Delete success", result });
 };
 

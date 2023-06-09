@@ -6,15 +6,15 @@ const { handleMongooseError } = require("../helpers");
 
 const songMongooseSchema = new Schema(
   {
-    is_public: { type: Boolean, required: false, default: false },
-    is_moderate: { type: Boolean, required: false, default: false },
-    owner: { type: Schema.Types.ObjectId, ref: "user", required: false },
+    is_public: { type: Boolean, required: true, default: false },
+    is_moderate: { type: Boolean, required: true, default: false },
+    owner: { type: Schema.Types.ObjectId, ref: "user", required: true },
     title: { type: String, required: true },
-    author: { type: String },
+    author: { type: String, default: "" },
     genres: { type: GENRES, default: [] },
-    path_to_song: String,
-    path_to_video: String,
-    path_to_img: String,
+    path_to_song: { type: String, default: "" },
+    path_to_video: { type: String, default: "" },
+    path_to_img: { type: String, default: "" },
     text: {
       type: [
         {
@@ -23,14 +23,15 @@ const songMongooseSchema = new Schema(
         },
       ],
       required: true,
+      default: [],
     },
     chords: {
       type: [String],
       default: [],
     },
-    dowloaded: Number,
-    watched: Number,
-    listened: Number,
+    dowloaded: { type: Number, default: 0 },
+    watched: { type: Number, default: 0 },
+    listened: { type: Number, default: 0 },
   },
   { versionKey: false, timestamps: true }
 );
