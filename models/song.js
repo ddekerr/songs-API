@@ -12,9 +12,9 @@ const songMongooseSchema = new Schema(
     title: { type: String, required: true },
     author: { type: String, default: "" },
     genres: { type: GENRES, default: [] },
-    path_to_song: { type: String, default: "" },
-    path_to_video: { type: String, default: "" },
-    path_to_img: { type: String, default: "" },
+    path_to_song: String,
+    path_to_video: String,
+    path_to_img: String,
     text: {
       type: [
         {
