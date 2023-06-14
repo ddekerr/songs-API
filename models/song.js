@@ -10,6 +10,7 @@ const songMongooseSchema = new Schema(
     is_moderate: { type: Boolean, required: true, default: false },
     owner: { type: Schema.Types.ObjectId, ref: "user", required: true },
     title: { type: String, required: true },
+    slug: { type: String, required: true },
     author: { type: String, default: "" },
     genres: { type: GENRES, default: [] },
     path_to_song: String,

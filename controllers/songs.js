@@ -1,5 +1,6 @@
 const { Song } = require("../models/song");
 const { HttpError, ctrlWrapper } = require("../helpers");
+const slug = require("slug");
 
 const getSongsList = async (req, res) => {
   const result = await Song.find();
@@ -19,6 +20,7 @@ const getSongById = async (req, res) => {
 
 const addNewSong = async (req, res) => {
   const { _id: owner } = req.user;
+  req.body.slug = slug(req.body.title, { locale: "ua", remove: /[0-9]/g });
   const result = await Song.create({ ...req.body, owner });
   res.status(201).json(result);
 };
