@@ -1,6 +1,10 @@
+const fs = require("fs/promises");
+const path = require("path");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/user");
 const { ctrlWrapper, HttpError, setJwtToken } = require("../helpers");
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -60,9 +64,22 @@ const refresh = async (req, res) => {
   res.json({ user: { name, email } });
 };
 
+const setAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempDir, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const publicDir = path.join(avatarsDir, filename);
+  await fs.rename(tempDir, publicDir);
+  const avatar = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatar });
+
+  res.json({ message: "File Save", avatar });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   refresh: ctrlWrapper(refresh),
+  setAvatar: ctrlWrapper(setAvatar),
 };
